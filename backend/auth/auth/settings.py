@@ -60,7 +60,14 @@ REST_FRAMEWORK = {
 DJOSER = {
     'LOGIN_FIELD': 'email',
     'USER_CREATE_PASSWORD_RETYPE': False,
-    'SEND_ACTIVATION_EMAIL': False,
+    'SEND_ACTIVATION_EMAIL': True,
+    'ACTIVATION_URL': 'http://localhost:5173/activate/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'http://localhost:5173/password-reset-confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': 'http://localhost:5173/username-reset-confirm/{uid}/{token}',
+    'EMAIL': {
+        'activation': 'Please click the link below to activate your account:',
+        'password_reset': 'Reset your password using the link below:'
+    }
 }
 
 MIDDLEWARE = [
@@ -106,6 +113,6 @@ STATIC_URL = 'static/'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp-relay.brevo.com')
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
-EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'a99bd8001@smtp-brevo.com')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
