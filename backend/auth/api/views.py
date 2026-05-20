@@ -1,4 +1,5 @@
 from django.core.mail import send_mail
+from django.conf import settings
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -16,9 +17,10 @@ def send_login_notification(request):
     send_mail(
         subject='Aphrodite login notification',
         message=f'You just logged in with {user.email}. If this was not you, please secure your account.',
-        from_email='no-reply@aphrodite.test',
+        from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=[user.email],
         fail_silently=False,
     )
 
     return Response({'detail': 'Login notification email has been sent.'})
+

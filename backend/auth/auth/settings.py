@@ -61,14 +61,23 @@ DJOSER = {
     'LOGIN_FIELD': 'email',
     'USER_CREATE_PASSWORD_RETYPE': False,
     'SEND_ACTIVATION_EMAIL': True,
-    'ACTIVATION_URL': 'http://localhost:5173/activate/{uid}/{token}',
-    'PASSWORD_RESET_CONFIRM_URL': 'http://localhost:5173/password-reset-confirm/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL': 'http://localhost:5173/username-reset-confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'activate/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'password-reset-confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': 'username-reset-confirm/{uid}/{token}',
+    'EMAIL_FRONTEND_PROTOCOL': 'http',
+    'EMAIL_FRONTEND_DOMAIN': 'localhost:5173',
+    'EMAIL_FRONTEND_SITE_NAME': 'Aphrodite',
     'EMAIL': {
-        'activation': 'Please click the link below to activate your account:',
-        'password_reset': 'Reset your password using the link below:'
+        'activation': 'djoser.email.ActivationEmail',
+        'password_reset': 'djoser.email.PasswordResetEmail',
+        'confirmation': 'djoser.email.ConfirmationEmail',
+    },
+    'SERIALIZERS': {
+        'user_create': 'api.serializers.CustomUserCreateSerializer',
     }
 }
+
+
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -110,9 +119,14 @@ DATABASES = {
 
 STATIC_URL = 'static/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'api.email_backend.BrevoEmailBackend'
+BREVO_API_KEY = os.getenv('BREVO_API_KEY', '')
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp-relay.brevo.com')
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
+EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', 'False') == 'True'
 EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
